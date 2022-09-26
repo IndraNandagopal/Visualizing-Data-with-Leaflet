@@ -1,5 +1,5 @@
-var SanAndreasCACoords = [35.1361, -119.6756];
-var mapZoomLevel = 5;
+var arkansasCoords = [34.5574, -92.2863];
+var mapZoomLevel = 4;
 
 function createMap(earthquake)
 {
@@ -8,7 +8,7 @@ function createMap(earthquake)
   var grayscaleMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
-    maxZoom: 5,
+    maxZoom: 4,
     zoomOffset: -1,
     id: "mapbox/light-v10",
     accessToken: API_KEY
@@ -24,7 +24,7 @@ function createMap(earthquake)
   };
   // Create the map object with options.
   var map = L.map("map", {
-    center: SanAndreasCACoords,
+    center: arkansasCoords,
     zoom: mapZoomLevel,
     layers: [grayscaleMap, earthquake]
   });
@@ -33,24 +33,20 @@ function createMap(earthquake)
     collapsed: false
   }).addTo(map);
 
-  function legendColor(depth){
-    if(depth < 10)
-            return "green";
-        else if(depth < 30)
-            return "yellow";
-        else if(depth < 50)
-            return "orange";
-        else if(depth < 70)
-            return "orangered";
-        else if(depth < 90)
-            return "red";
-        else return "maroon";
-  };
-  
+  var legendColors = [
+    "green",
+    "yellow",
+    "orange",
+    "orangered",
+    "red",
+    "maroon"
+  ];
+    
   // Create a legend to display information about our map
   var legend = L.control({
     position: "bottomright",
-    fillColor: "white"
+    backgroundColor: 'white',
+    
   });
   
   // When the layer control is added, insert a div with the class of "legend"
@@ -60,7 +56,7 @@ function createMap(earthquake)
     var labels = ["-10-10", "10-30", "30-50", "50-70", "70-90", "90+"];
     div.innerHTML = '<div>Depth (km)</div>';
     for (var i = 0; i < depth.length; i++){
-      div.innerHTML += '<i style="background:' + legendColor(depth[i]) + '">&nbsp;&nbsp;&nbsp;&nbsp;</i>&nbsp;'+
+      div.innerHTML += '<i style="background:' + legendColors[i] + '">&nbsp;&nbsp;&nbsp;&nbsp;</i>&nbsp;'+
                       labels[i] + '<br>';
     }
     return div;
