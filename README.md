@@ -40,7 +40,7 @@ Plot a second dataset on the map to illustrate the relationship between tectonic
 
 Here is the screenshot of the map with tectonic plates and earthquakes:
 
-![TectonicPlates_with_Earthquakes](Leaflet-Part-2/Images/TectonicPlates_ with_Earthquakes.png)
+![TectonicPlates_with_Earthquakes](Leaflet-Part-2/Images/TectonicPlates_with_Earthquakes.png)
 
 Performed the following tasks: 
 
