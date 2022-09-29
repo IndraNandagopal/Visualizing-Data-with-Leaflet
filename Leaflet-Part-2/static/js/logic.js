@@ -1,11 +1,10 @@
-var arkansasCoords = [34.5574, -92.2863];
-var mapZoomLevel = 3;
+var ItalyCoords = [41.8719, 12.5674];
+var mapZoomLevel = 2;
 var tectonicplatesURL = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
 
 function createMap(earthquake, tectonicplate)
 {
-  console.log("in Create");
-  console.log("Plates Data in create map", tectonicplate); 
+  console.log("Plates Data:", tectonicplate); 
   // Create the tile layer that will be the background of our map.
   // Create tile layer
 
@@ -43,19 +42,19 @@ function createMap(earthquake, tectonicplate)
     "Outdoors": outdoors
   };
   
-  
-
   // Create an overlayMaps object to hold the earthquake layer.
   var overlayMaps = {
     "Earthquakes": earthquake,
     "Tectonic Plates": tectonicplate
   };
+
   // Create the map object with options.
   var map = L.map("map", {
-    center: arkansasCoords,
+    center: ItalyCoords,
     zoom: mapZoomLevel,
     layers: [satellite,earthquake,tectonicplate]
   });
+
   // Create a layer control, and pass it baseMaps and overlayMaps. Add the layer control to the map.
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
@@ -91,6 +90,7 @@ function createMap(earthquake, tectonicplate)
   // Add the legend to the map
   legend.addTo(map);
 }
+
 // Create the createMarkers function.
 function createMarkers(response)
 {
@@ -104,13 +104,13 @@ function createMarkers(response)
   // Loop through the stations array.
   for(var i = 0; i < earthquakesData.length; i++)
   {
-    //console.log(earthquakesData[i]);
-    // For each earthquake, create a marker, and bind a popup with the title and time.
+    // For each earthquake, create a marker, and bind a popup with place, mag and depth.
     
-    // change the marker size based on depth
+    // change the marker size based on magnitude and depth by color
     var markerRadius = earthquakesData[i].properties.mag * 30000;
     var markerColor;
     var depth = earthquakesData[i].geometry.coordinates[2]
+
     if(depth < 10)
       markerColor = "green";
     else if(depth < 30)
@@ -156,10 +156,8 @@ function createMarkers(response)
     .addTo(tectonicplates);
 
     createMap(earthquakes, tectonicplates)
-    // Then add the tectonicplates layer to the map.
-    //tectonicplates.addTo(map);
+  
   });
-
  
 };
 
