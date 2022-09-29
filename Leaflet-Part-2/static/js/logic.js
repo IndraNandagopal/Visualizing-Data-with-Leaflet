@@ -1,32 +1,60 @@
 var arkansasCoords = [34.5574, -92.2863];
-var mapZoomLevel = 4;
+var mapZoomLevel = 3;
+var tectonicplatesURL = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
 
-function createMap(earthquake)
+function createMap(earthquake, tectonicplate)
 {
+  console.log("in Create");
+  console.log("Plates Data in create map", tectonicplate); 
   // Create the tile layer that will be the background of our map.
   // Create tile layer
-  var grayscaleMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+
+  var satellite = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+        tileSize: 512,
+        maxZoom: 5,
+        zoomOffset: -1,
+        id: "mapbox/satellite-v9",
+        accessToken: API_KEY
+  });
+
+  var grayscale = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
-    maxZoom: 4,
+    maxZoom: 5,
     zoomOffset: -1,
     id: "mapbox/light-v10",
     accessToken: API_KEY
   });
 
+  var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+        tileSize: 512,
+        maxZoom: 5,
+        zoomOffset: -1,
+        id: "mapbox/outdoors-v11",
+        accessToken: API_KEY
+  });
+
   // Create a baseMaps object to hold the streetmap layer.
   var baseMaps = {
-    "Grayscale Map": grayscaleMap
+    "Satellite": satellite,
+    "Grayscale": grayscale,
+    "Outdoors": outdoors
   };
+  
+  
+
   // Create an overlayMaps object to hold the earthquake layer.
   var overlayMaps = {
-    "Earthquakes": earthquake
+    "Earthquakes": earthquake,
+    "Tectonic Plates": tectonicplate
   };
   // Create the map object with options.
   var map = L.map("map", {
     center: arkansasCoords,
     zoom: mapZoomLevel,
-    layers: [grayscaleMap, earthquake]
+    layers: [satellite,earthquake,tectonicplate]
   });
   // Create a layer control, and pass it baseMaps and overlayMaps. Add the layer control to the map.
   L.control.layers(baseMaps, overlayMaps, {
@@ -108,19 +136,35 @@ function createMarkers(response)
     + earthquakesData[i].geometry.coordinates[2]
     + "<br>Location: "
     + earthquakesData[i].properties.place + "</h3></p>");
-    
     // Add the marker to the earthquakeMarkers array.
     earthquakeMarkers.push(earthquake);
     
   }
-  console.log(earthquakeMarkers);
+  console.log("earthquake Markers:",earthquakeMarkers);
 
-  var earthquake = L.layerGroup(earthquakeMarkers); 
-  createMap(earthquake);
-  
-}
+  // Create layerGroup for earthquakeMarkers
+  let earthquakes = L.layerGroup(earthquakeMarkers);
+  var tectonicplates = new L.LayerGroup();
+
+  d3.json("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json").then(function(platedata) {
+    // Adding our geoJSON data, along with style information, to the tectonicplates
+    // layer.
+    L.geoJson(platedata, {
+      color: "blue",
+      weight: 2
+    })
+    .addTo(tectonicplates);
+
+    createMap(earthquakes, tectonicplates)
+    // Then add the tectonicplates layer to the map.
+    //tectonicplates.addTo(map);
+  });
+
+ 
+};
 
 // Perform an API call to the earthquake API to get the earthquake information. Call createMarkers when it completes.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(
+  
   createMarkers
 );
