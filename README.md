@@ -8,7 +8,7 @@ The USGS is interested in building a new set of tools that will allow them to vi
 
 ## Project Instructions
 
-This project consists of two parts: 
+The project consists of two parts: 
 
 * Part 1: Create the Earthquake Visualization 
 
@@ -18,7 +18,7 @@ This project consists of two parts:
 
 ![Basic_map](Leaflet-Part-1/Images/Basic_map.png)
 
-### 1. Get the Data Set
+### 1. Get the data set
 
     *   The USGS provides earthquake data in a number of different formats, updated every 5 minutes
     *   The "All Earthquakes from the Past 7 Days" data set was selected from the USGS GeoJSON Feed page
@@ -40,7 +40,7 @@ Plot a second dataset on the map to illustrate the relationship between tectonic
 
 Here is the screenshot of the map with tectonic plates and earthquakes:
 
-![TectonicPlates_with_Earthquakes](Leaflet-Part-2/Images/TectonicPlates_ with Earthquakes.png)
+![TectonicPlates_with_Earthquakes](Leaflet-Part-2/Images/TectonicPlates_ with_Earthquakes.png)
 
 Performed the following tasks: 
 
