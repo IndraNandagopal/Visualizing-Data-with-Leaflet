@@ -146,9 +146,10 @@ function createMarkers(response)
   let earthquakes = L.layerGroup(earthquakeMarkers);
   var tectonicplates = new L.LayerGroup();
 
+  // Adding our geoJSON data, along with style information, to the tectonicplates
+  // layer.
   d3.json("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json").then(function(platedata) {
-    // Adding our geoJSON data, along with style information, to the tectonicplates
-    // layer.
+    
     L.geoJson(platedata, {
       color: "blue",
       weight: 2
