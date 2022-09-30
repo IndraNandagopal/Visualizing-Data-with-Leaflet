@@ -156,6 +156,7 @@ function createMarkers(response)
     })
     .addTo(tectonicplates);
 
+    //Calling createMap function
     createMap(earthquakes, tectonicplates)
   
   });

@@ -14,7 +14,7 @@ function createMap(earthquake)
     accessToken: API_KEY
   });
 
-  // Create a baseMaps object to hold the streetmap layer.
+  // Create a baseMaps object to hold the greyscale layer.
   var baseMaps = {
     "Grayscale Map": grayscaleMap
   };
